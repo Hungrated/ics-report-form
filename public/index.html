@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <link type="text/css" rel="stylesheet" href="./stylesheets/style.css">
+</head>
+
+<body>
+    <div id="oIcsReportForm"></div>
+</body>
+
+<script type="text/javascript" src="./javascripts/ics-report-form.js"></script>
+<script>
+    let reportForm = new IcsReportForm({
+        el: oIcsReportForm
+    });
+
+    let reportData = {
+        header: {
+            title: '“鉴势”工控系统信息安全核查报告',
+            district: '杭州市',
+            time: date()
+        },
+        body: {
+            introduction: {
+                subtitle: '企业（部门）相关情况',
+                description: [{
+                    field: '名 称',
+                    val: 'XX 部门'
+                }, {
+                    field: '地 区',
+                    val: '杭州市， 浙江省， 中 国'
+                }, {
+                    field: '联系电话',
+                    val: '86919094'
+                }, {
+                    field: '邮 箱',
+                    val: 'computer@hdu.edu.cn'
+                }]
+            },
+            totalStatus: {
+                subtitle: '系统总体情况'
+            },
+            riskStatus: {
+                subtitle: '系统风险等级'
+            },
+            bugDetails: {
+                subtitle: '系统漏洞详情'
+            },
+            conclusion: {
+                subtitle: '结 论'
+            }
+
+        },
+        footer: {
+
+        }
+    };
+
+    reportForm.createReport(reportData);
+
+    function date(time, format) {
+        let curTime = undefined;
+        if (time && typeof time === 'string')
+            curTime = new Date(time);
+        else
+            curTime = (time) ? time : new Date();
+
+        let convert = function(digit) {
+            if (digit < 10) return '0' + digit;
+            else return digit.toString();
+        };
+
+        let year = curTime.getFullYear();
+        let month = convert(curTime.getMonth() + 1);
+        let day = convert(curTime.getDate());
+        let hour = convert(curTime.getHours());
+        let minute = convert(curTime.getMinutes());
+        let second = convert(curTime.getSeconds());
+
+        if (format === 'idString')
+            return parseInt('0' + year + month + day + hour + minute + second);
+        else
+            return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+
+    }
+</script>
+
+</html>
