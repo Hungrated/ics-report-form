@@ -20,8 +20,7 @@
   let reportData = {
     header: {
       title: '“鉴势”工控系统信息安全核查报告',
-      district: '杭州市',
-      time: date()
+      district: '杭州市'
     },
     body: {
       introduction: {
@@ -123,7 +122,10 @@
       }
 
     },
-    footer: {}
+    footer: {
+      time: date(),
+      msg: '鉴势团队 copyright 2017 HDU MJXZ All rights reserved.'
+    }
   };
 
   reportForm.createReport(reportData);

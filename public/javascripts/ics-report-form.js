@@ -37,7 +37,7 @@
       header.appendChild(title);
       header.appendChild(info);
       title.innerHTML = headerData.title;
-      info.innerHTML = '地 区： ' + headerData.district + '&emsp;&emsp;生成时间： ' + headerData.time;
+      info.innerHTML = '地 区： ' + headerData.district;
 
     }
   };
@@ -63,11 +63,21 @@
     if (!footerData) {
       throw 'Validation error: obj.footer not found';
     } else {
-      this.oFooterCss(this.appWidth);
+      this.oFooterCss();
       let footer = document.createElement('div');
-      footer.className = 'report-footer';
-      this.nodeElement.appendChild(footer);
+      let exportTime = document.createElement('div');
+      let message = document.createElement('div');
 
+      footer.className = 'report-footer';
+      exportTime.className = 'report-footer-exportTime';
+      message.className = 'report-footer-message';
+
+      this.nodeElement.appendChild(footer);
+      footer.appendChild(exportTime);
+      footer.appendChild(message);
+
+      exportTime.innerHTML = '报表导出时间： ' + footerData.time;
+      message.innerHTML = footerData.msg;
 
     }
   };
@@ -161,40 +171,6 @@
 
     }
   };
-
-
-  // IcsReportForm.prototype.createForm = function(obj) { // body.form
-  //   this.createTableHead();
-  //   this.createTable(obj);
-  // };
-  //
-  // IcsReportForm.prototype.createTableHead = function() { // body.form.head
-  // };
-  //
-  // IcsReportForm.prototype.createTable = function(obj) { // body.form.table
-  //   if (!obj) {
-  //     throw 'Please set the number of rows or columns, arg[obj]';
-  //   } else {
-  //     // create a form
-  //     this.cellWidth = this.tableWidth / obj.col;
-  //     this.oTableCss();
-  //     for (let i = 0; i < obj.row; i++) {
-  //       let rowElem = document.createElement('div');
-  //       rowElem.className = 't-row';
-  //       if (i % 2 === 0) {
-  //         rowElem.className += ' t-double';
-  //       }
-  //       this.nodeElement.appendChild(rowElem);
-  //
-  //       for (let i = 0; i < obj.col; i++) {
-  //         let colElem = document.createElement('div');
-  //         colElem.className = 't-col';
-  //         rowElem.appendChild(colElem);
-  //
-  //       }
-  //     }
-  //   }
-  // };
 
 
   /*-------------------------------------------------------------------------------------------------*/
@@ -293,6 +269,16 @@
     css.innerText += ' .report-body-subtitle {font-size: 24px; padding: 20px; border-bottom: 1px solid #999999;}';
   };
 
+  IcsReportForm.prototype.oFooterCss = function () { // footer css
+    let css = document.getElementsByTagName("style")[0];
+    if (!css) {
+      css = document.createElement("style");
+      document.head.appendChild(css);
+    }
+
+    css.innerText += ' .report-footer {padding: 0px 50px; padding-bottom: 20px; display: flex; justify-content: space-between; color: #999999;}';
+  };
+
   IcsReportForm.prototype.oIntroductionCss = function () { // body.introduction css
     let css = document.getElementsByTagName("style")[0];
     if (!css) {
@@ -301,9 +287,9 @@
     }
 
     css.innerText += ' .report-body-introduction {display: flex; flex-direction: column; margin-bottom: 20px;}';
-    css.innerText += ' .i-row {display: flex; width: 100%; border-bottom: 1px solid #999999; background: #FFFFFF}';
-    css.innerText += ' .i-col-left {height: 100%; width: 250px; padding: 6px 20px; font-size: 16px}';
-    css.innerText += ' .i-col-right {height: 100%; flex: 1 1 auto; padding: 6px 20px; font-size: 16px}';
+    css.innerText += ' .i-row {display: flex; width: 100%; border-bottom: 1px solid #999999; background: #FFFFFF;}';
+    css.innerText += ' .i-col-left {height: 100%; width: 250px; padding: 6px 20px; font-size: 16px;}';
+    css.innerText += ' .i-col-right {height: 100%; flex: 1 1 auto; padding: 6px 20px; font-size: 16px;}';
     css.innerText += ' .i-double {background: #EEEEEE;}';
 
   };
@@ -348,16 +334,6 @@
     css.innerText += ' ';
   };
 
-
-  IcsReportForm.prototype.oFooterCss = function (nodeWidth) { // footer css
-    let css = document.getElementsByTagName("style")[0];
-    if (!css) {
-      css = document.createElement("style");
-      document.head.appendChild(css);
-    }
-
-    css.innerText += ' ';
-  };
 
   IcsReportForm.prototype.oTableCss = function (flag, tWidth, cWidths) { // table css
 
