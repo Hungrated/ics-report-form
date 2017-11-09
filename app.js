@@ -1,42 +1,52 @@
-var express = require('express');
-var path = require('path');
-// var favicon = require('serve-favicon');
-// var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
+const pathLib = require('path');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 
-var app = express();
+const app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+//bodyParser
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
-// app.use('/', index);
-// app.use('/users', users);
+(function () {
+  // cookie handler
+  app.use(cookieParser());
+
+  // session handler
+  let arr = [];
+  for (let i = 0; i < 100000; i++) {
+    arr.push('keys_' + Math.random());
+  }
+  app.use(cookieSession({
+    name: 'session_id',
+    keys: arr,
+    maxAge: 30 * 3600 * 1000
+  }));
+})();
+
+// static resources handler
+app.use(express.static(pathLib.join(__dirname, 'public')));
+
+app.use('/api/bug', require('./routes/route_bugs'));
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+app.use(function (req, res, next) {
+  let err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
+app.use(function (err, req, res) {
+  console.error(err);
+  // render the error page
+  res.status(err.status || 500);
+  res.json(statusLib.SERVER_INNER_ERROR);
 });
+
 
 module.exports = app;

@@ -229,7 +229,6 @@
   };
 
 
-
   /*-------------------------------------------------------------------------------------------------*/
   /* Style functions */
 
@@ -265,7 +264,7 @@
       document.head.appendChild(css);
     }
 
-    css.innerText += ' .report-body {padding: 20px 50px; width: ' +nodeWidth + 'px;}';
+    css.innerText += ' .report-body {padding: 20px 50px; width: ' + nodeWidth + 'px;}';
     css.innerText += ' .report-body-subtitle {font-size: 24px; padding: 20px; border-bottom: 1px solid #999999;}';
   };
 
