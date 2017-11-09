@@ -1,20 +1,20 @@
 (function () {
   window.IcsReportForm = function (obj) {
     this.nodeElement = obj.el || document.body;
-    this.appWidth = document.body.clientWidth;
+    this.appWidth = document.body.clientWidth - 250;
   };
 
   /*-------------------------------------------------------------------------------------------------*/
   /* Main onstruction functions */
 
-  IcsReportForm.prototype.createReport = function (obj) { // main
-    if (!obj) {
+  IcsReportForm.prototype.createReport = function (data) { // main
+    if (!data) {
       throw 'Validation error: data not found';
     } else {
-      this.oReportFormCss();
-      this.createHeader(obj.header);
-      this.createBody(obj.body);
-      this.createFooter(obj.footer);
+      this.oReportFormCss(this.appWidth);
+      this.createHeader(data.header);
+      this.createBody(data.body);
+      this.createFooter(data.footer);
     }
   };
 
@@ -22,7 +22,7 @@
     if (!headerData) {
       throw 'Validation error: obj.header not found';
     } else {
-      this.oHeaderCss();
+
       let header = document.createElement('div');
       let title = document.createElement('div');
       let info = document.createElement('div');
@@ -33,6 +33,7 @@
       info.className = 'report-header-info';
 
       this.nodeElement.appendChild(header);
+      this.oHeaderCss(header.appWidth);
       header.appendChild(title);
       header.appendChild(info);
       title.innerHTML = headerData.title;
@@ -45,10 +46,10 @@
     if (!bodyData) {
       throw 'Validation error: obj.body not found';
     } else {
-      this.oBodyCss();
       let body = document.createElement('div');
       body.className = 'report-body';
       this.nodeElement.appendChild(body);
+      this.oBodyCss(body.clientWidth);
       this.createIntroduction(body, bodyData.introduction);
       this.createTotalStatus(body, bodyData.totalStatus);
       this.createRiskStatus(body, bodyData.riskStatus);
@@ -62,7 +63,7 @@
     if (!footerData) {
       throw 'Validation error: obj.footer not found';
     } else {
-      this.oFooterCss();
+      this.oFooterCss(this.appWidth);
       let footer = document.createElement('div');
       footer.className = 'report-footer';
       this.nodeElement.appendChild(footer);
@@ -78,7 +79,7 @@
     if (!introductionData) {
       throw 'Validation error: obj.body.introduction not found';
     } else {
-      this.oIntroductionCss();
+      this.oIntroductionCss(node.clientWidth);
       let introduction = document.createElement('div');
       introduction.className = 'report-body-introduction';
       node.appendChild(introduction);
@@ -109,7 +110,7 @@
     if (!totalStatusData) {
       throw 'Validation error: obj.body.totalStatus not found';
     } else {
-      this.oTotalStatusCss();
+      this.oTotalStatusCss(node.clientWidth);
       let totalStatus = document.createElement('div');
       totalStatus.className = 'report-body-totalStatus';
       node.appendChild(totalStatus);
@@ -124,7 +125,7 @@
     if (!riskStatusData) {
       throw 'Validation error: obj.body.totalStatus not found';
     } else {
-      this.oriskStatusCss();
+      this.oRiskStatusCss(node.clientWidth);
       let riskStatus = document.createElement('div');
       riskStatus.className = 'report-body-riskStatus';
       node.appendChild(riskStatus);
@@ -137,7 +138,7 @@
     if (!bugDetailsData) {
       throw 'Validation error: obj.body.totalStatus not found';
     } else {
-      this.obugDetailsCss();
+      this.oBugDetailsCss(node.clientWidth);
       let bugDetails = document.createElement('div');
       bugDetails.className = 'report-body-bugDetails';
       node.appendChild(bugDetails);
@@ -251,47 +252,44 @@
     }
   };
 
-  IcsReportForm.prototype.createGrid = function (node, data) {
-
-  };
 
 
   /*-------------------------------------------------------------------------------------------------*/
   /* Style functions */
 
 
-  IcsReportForm.prototype.oReportFormCss = function () { // main css
+  IcsReportForm.prototype.oReportFormCss = function (nodeWidth) { // main css
     this.nodeElement.className = 'report-container';
     let css = document.getElementsByTagName("style")[0];
     if (!css) {
       css = document.createElement("style");
       document.head.appendChild(css);
     }
-    css.innerText += ' body {display: flex; font: \"微软雅黑\", \"Times New Roman\";}';
-    css.innerText += ' .report-container {margin: 100px; width: ' + this.appWidth + 'px; min-height: 200px; justify-content: center; vertical-align: center; background: #FFFFFF; border-radius: 10px; box-shadow: 0px 0px 5px #999999}';
+    css.innerText += ' body {min-width: 1000px; font: \"微软雅黑\", \"Times New Roman\"; box-sizing: border-box; justify-content: center;}';
+    css.innerText += ' .report-container {margin: 100px auto; width: ' + nodeWidth + 'px; min-height: 200px; justify-content: center; vertical-align: center; background: #FFFFFF; border-radius: 10px; box-shadow: 0px 0px 5px #999999}';
 
   };
 
-  IcsReportForm.prototype.oHeaderCss = function () { // header css
+  IcsReportForm.prototype.oHeaderCss = function (nodeWidth) { // header css
     let css = document.getElementsByTagName("style")[0];
     if (!css) {
       css = document.createElement("style");
       document.head.appendChild(css);
     }
-    css.innerText += ' .report-header {padding: 20px 50px; width: 100%; background: #EEEEEE; border-radius: 10px;}';
+    css.innerText += ' .report-header {padding: 20px 50px; width: ' + nodeWidth + 'px; background: #F0FFFF; border-radius: 10px;}';
     css.innerText += ' .report-header-title {width: 100%; padding: 10px; font-size: 32px; text-align: center;}';
     css.innerText += ' .report-header-info {width: 100%; padding: 10px; font-size: 18px; text-align: center; color: #999999;}';
 
   };
 
-  IcsReportForm.prototype.oBodyCss = function () { // body css
+  IcsReportForm.prototype.oBodyCss = function (nodeWidth) { // body css
     let css = document.getElementsByTagName("style")[0];
     if (!css) {
       css = document.createElement("style");
       document.head.appendChild(css);
     }
 
-    css.innerText += ' .report-body {padding: 20px 50px;}';
+    css.innerText += ' .report-body {padding: 20px 50px; width: ' +nodeWidth + 'px;}';
     css.innerText += ' .report-body-subtitle {font-size: 24px; padding: 20px; border-bottom: 1px solid #999999;}';
   };
 
@@ -303,10 +301,10 @@
     }
 
     css.innerText += ' .report-body-introduction {display: flex; flex-direction: column; margin-bottom: 20px;}';
-    css.innerText += ' .i-row {display: flex; width: 100%; border-bottom: 1px solid #999999; background: #F0FFFF}';
-    css.innerText += ' .i-col-left {width: 250px; padding: 6px 20px; font-size: 18px}';
-    css.innerText += ' .i-col-right {flex: 1 1 auto; padding: 6px 20px; font-size: 18px}';
-    css.innerText += ' .i-double {background: #87CEFA;}';
+    css.innerText += ' .i-row {display: flex; width: 100%; border-bottom: 1px solid #999999; background: #FFFFFF}';
+    css.innerText += ' .i-col-left {height: 100%; width: 250px; padding: 6px 20px; font-size: 16px}';
+    css.innerText += ' .i-col-right {height: 100%; flex: 1 1 auto; padding: 6px 20px; font-size: 16px}';
+    css.innerText += ' .i-double {background: #EEEEEE;}';
 
   };
 
@@ -320,7 +318,7 @@
     css.innerText += ' ';
   };
 
-  IcsReportForm.prototype.oriskStatusCss = function () { // body.riskStatus css
+  IcsReportForm.prototype.oRiskStatusCss = function () { // body.riskStatus css
     let css = document.getElementsByTagName("style")[0];
     if (!css) {
       css = document.createElement("style");
@@ -330,7 +328,7 @@
     css.innerText += ' ';
   };
 
-  IcsReportForm.prototype.obugDetailsCss = function () { // body.bugDetails css
+  IcsReportForm.prototype.oBugDetailsCss = function () { // body.bugDetails css
     let css = document.getElementsByTagName("style")[0];
     if (!css) {
       css = document.createElement("style");
@@ -351,7 +349,7 @@
   };
 
 
-  IcsReportForm.prototype.oFooterCss = function () { // footer css
+  IcsReportForm.prototype.oFooterCss = function (nodeWidth) { // footer css
     let css = document.getElementsByTagName("style")[0];
     if (!css) {
       css = document.createElement("style");
@@ -361,7 +359,7 @@
     css.innerText += ' ';
   };
 
-  IcsReportForm.prototype.oTableCss = function (flag, tWidth, cWidths) {
+  IcsReportForm.prototype.oTableCss = function (flag, tWidth, cWidths) { // table css
 
     // fetch style element
     let css = document.getElementsByTagName("style")[0];
@@ -372,18 +370,19 @@
 
     // calculate colWidth
     let sum = 0;
-    for (let i  = 0; i < cWidths.length; i++) {
+    for (let i = 0; i < cWidths.length; i++) {
       sum += parseFloat(cWidths[i]);
       console.log(sum);
     }
 
+    css.innerText += ' .' + flag + '-table-container {border-top: 1px solid #999999; border-bottom: 1px solid #999999;}';
     css.innerText += ' .' + flag + '-head {width: 100%; height: 30px; background: #BBBBBB;}';
     css.innerText += ' .' + flag + '-row {width: 100%; height: 30px; background: #EEEEEE;}';
     css.innerText += ' .' + flag + '-double {width: 100%; height: 30px; background: #FFFFFF;}';
-    css.innerText += ' .' + flag + '-col {float: left; height: 100%; border: 1px solid #999999;}';
+    css.innerText += ' .' + flag + '-col {float: left; height: 100%;}';
 
     for (let i = 0; i < cWidths.length; i++) {
-      let cWidth = (tWidth * cWidths[i]) / sum;
+      let cWidth = ((tWidth - 2) * cWidths[i]) / sum;
       css.innerText += ' .' + flag + '-col-' + i + ' { width: ' + cWidth + 'px;}';
     }
 
