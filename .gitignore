@@ -1,0 +1,6 @@
+.idea/
+node_modules/
+public/javascripts/echarts.js
+public/javascripts/jquery.min.js
+routes/
+views/

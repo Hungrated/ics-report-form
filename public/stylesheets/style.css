@@ -1,15 +1,15 @@
 * {
-    /* border: 1px solid red; */
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  /* border: 1px solid red; */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-    background: #333333;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: #333333;
 }
 
 a {
-    color: #00B7FF;
+  color: #00B7FF;
 }

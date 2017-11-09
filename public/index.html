@@ -2,90 +2,157 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Test</title>
-    <link type="text/css" rel="stylesheet" href="./stylesheets/style.css">
+  <meta charset="UTF-8">
+  <title>Test</title>
+  <link type="text/css" rel="stylesheet" href="./stylesheets/style.css">
 </head>
 
 <body>
-    <div id="oIcsReportForm"></div>
+  <div id="oIcsReportForm"></div>
 </body>
 
 <script type="text/javascript" src="./javascripts/ics-report-form.js"></script>
 <script>
-    let reportForm = new IcsReportForm({
-        el: oIcsReportForm
-    });
+  let reportForm = new IcsReportForm({
+    el: oIcsReportForm
+  });
 
-    let reportData = {
-        header: {
-            title: '“鉴势”工控系统信息安全核查报告',
-            district: '杭州市',
-            time: date()
-        },
-        body: {
-            introduction: {
-                subtitle: '企业（部门）相关情况',
-                description: [{
-                    field: '名 称',
-                    val: 'XX 部门'
-                }, {
-                    field: '地 区',
-                    val: '杭州市， 浙江省， 中 国'
-                }, {
-                    field: '联系电话',
-                    val: '86919094'
-                }, {
-                    field: '邮 箱',
-                    val: 'computer@hdu.edu.cn'
-                }]
-            },
-            totalStatus: {
-                subtitle: '系统总体情况'
-            },
-            riskStatus: {
-                subtitle: '系统风险等级'
-            },
-            bugDetails: {
-                subtitle: '系统漏洞详情'
-            },
-            conclusion: {
-                subtitle: '结 论'
-            }
-
-        },
-        footer: {
-
+  let reportData = {
+    header: {
+      title: '“鉴势”工控系统信息安全核查报告',
+      district: '杭州市',
+      time: date()
+    },
+    body: {
+      introduction: {
+        subtitle: '企业（部门）相关情况',
+        description: [{
+          field: '名 称',
+          val: 'XX 部门'
+        }, {
+          field: '地 区',
+          val: '杭州市， 浙江省， 中 国'
+        }, {
+          field: '联系电话',
+          val: '86919094'
+        }, {
+          field: '邮 箱',
+          val: 'computer@hdu.edu.cn'
+        }]
+      },
+      totalStatus: {
+        subtitle: '系统总体情况',
+        data: {
+          tableFlag: 'ts',
+          head: ['系统类别', '数 量', '备 注'],
+          content: [
+            ['SCADA', 5, ' '],
+            ['DCS', 2, ' '],
+            ['PLC', 1, ' ']
+          ],
+          op: {
+            col: [1, 1, 3] // partition of tableWidth
+          }
         }
+      },
+      riskStatus: {
+        subtitle: '系统风险等级'
+      },
+      bugDetails: {
+        subtitle: '系统漏洞详情',
+        data: {
+          tableFlag: 'bd',
+          head: ['序 号', '名 称', '类 别', '等 级', '摘 要', '详 情'],
+          content: [
+            [1, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [2, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [3, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [4, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [5, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [6, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [7, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [8, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [9, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [10, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [11, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [12, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [13, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [14, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [15, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [16, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [17, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [18, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [19, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [20, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [21, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [22, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [23, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看'],
+            [24, '工作站软件', 'SCADA', '高危',
+              '该漏洞能引发远程攻击', '点击查看']
+          ],
+          op: {
+            col: [1, 2, 2, 1, 5, 2] // partition of tableWidth
+          }
+        }
+      },
+      conclusion: {
+        subtitle: '结 论'
+      }
+
+    },
+    footer: {}
+  };
+
+  reportForm.createReport(reportData);
+
+  function date(time, format) {
+    let curTime = undefined;
+    if (time && typeof time === 'string')
+      curTime = new Date(time);
+    else
+      curTime = (time) ? time : new Date();
+
+    let convert = function(digit) {
+      if (digit < 10) return '0' + digit;
+      else return digit.toString();
     };
 
-    reportForm.createReport(reportData);
+    let year = curTime.getFullYear();
+    let month = convert(curTime.getMonth() + 1);
+    let day = convert(curTime.getDate());
+    let hour = convert(curTime.getHours());
+    let minute = convert(curTime.getMinutes());
+    let second = convert(curTime.getSeconds());
 
-    function date(time, format) {
-        let curTime = undefined;
-        if (time && typeof time === 'string')
-            curTime = new Date(time);
-        else
-            curTime = (time) ? time : new Date();
+    if (format === 'idString')
+      return parseInt('0' + year + month + day + hour + minute + second);
+    else
+      return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
 
-        let convert = function(digit) {
-            if (digit < 10) return '0' + digit;
-            else return digit.toString();
-        };
-
-        let year = curTime.getFullYear();
-        let month = convert(curTime.getMonth() + 1);
-        let day = convert(curTime.getDate());
-        let hour = convert(curTime.getHours());
-        let minute = convert(curTime.getMinutes());
-        let second = convert(curTime.getSeconds());
-
-        if (format === 'idString')
-            return parseInt('0' + year + month + day + hour + minute + second);
-        else
-            return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
-
-    }
+  }
 </script>
 
 </html>
