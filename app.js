@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
-(function () {
+(function() {
   // cookie handler
   app.use(cookieParser());
 
@@ -31,17 +31,17 @@ app.use(bodyParser.urlencoded({
 // static resources handler
 app.use(express.static(pathLib.join(__dirname, 'public')));
 
-app.use('/api/bug', require('./routes/route_bugs'));
+app.use('/api/data', require('./routes/route_data'));
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
   let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function (err, req, res) {
+app.use(function(err, req, res) {
   console.error(err);
   // render the error page
   res.status(err.status || 500);

@@ -1,5 +1,5 @@
-(function () {
-  window.IcsReportForm = function (obj) {
+(function() {
+  window.IcsReportForm = function(obj) {
     this.nodeElement = obj.el || document.body;
     this.appWidth = document.body.clientWidth - 250;
   };
@@ -7,7 +7,7 @@
   /*-------------------------------------------------------------------------------------------------*/
   /* Main onstruction functions */
 
-  IcsReportForm.prototype.createReport = function (data) { // main
+  IcsReportForm.prototype.createReport = function(data) { // main
     if (!data) {
       throw 'Validation error: data not found';
     } else {
@@ -18,7 +18,7 @@
     }
   };
 
-  IcsReportForm.prototype.createHeader = function (headerData) { // header
+  IcsReportForm.prototype.createHeader = function(headerData) { // header
     if (!headerData) {
       throw 'Validation error: obj.header not found';
     } else {
@@ -42,7 +42,7 @@
     }
   };
 
-  IcsReportForm.prototype.createBody = function (bodyData) { // body
+  IcsReportForm.prototype.createBody = function(bodyData) { // body
     if (!bodyData) {
       throw 'Validation error: obj.body not found';
     } else {
@@ -59,7 +59,7 @@
     }
   };
 
-  IcsReportForm.prototype.createFooter = function (footerData) { // footer
+  IcsReportForm.prototype.createFooter = function(footerData) { // footer
     if (!footerData) {
       throw 'Validation error: obj.footer not found';
     } else {
@@ -76,7 +76,7 @@
       footer.appendChild(exportTime);
       footer.appendChild(message);
 
-      exportTime.innerHTML = '报表导出时间： ' + footerData.time;
+      exportTime.innerHTML = '报表导出时间： ' + this.getDate();
       message.innerHTML = footerData.msg;
 
     }
@@ -85,7 +85,7 @@
   /*-------------------------------------------------------------------------------------------------*/
   /* Base construction functions */
 
-  IcsReportForm.prototype.createIntroduction = function (node, introductionData) { // body.introduction
+  IcsReportForm.prototype.createIntroduction = function(node, introductionData) { // body.introduction
     if (!introductionData) {
       throw 'Validation error: obj.body.introduction not found';
     } else {
@@ -116,7 +116,7 @@
   };
 
 
-  IcsReportForm.prototype.createTotalStatus = function (node, totalStatusData) {
+  IcsReportForm.prototype.createTotalStatus = function(node, totalStatusData) {
     if (!totalStatusData) {
       throw 'Validation error: obj.body.totalStatus not found';
     } else {
@@ -131,7 +131,7 @@
 
   };
 
-  IcsReportForm.prototype.createRiskStatus = function (node, riskStatusData) {
+  IcsReportForm.prototype.createRiskStatus = function(node, riskStatusData) {
     if (!riskStatusData) {
       throw 'Validation error: obj.body.totalStatus not found';
     } else {
@@ -141,10 +141,17 @@
       node.appendChild(riskStatus);
       this.createSubtitle(riskStatus, riskStatusData.subtitle);
 
+      let score = document.createElement('div');
+      score.className = 'report-body-riskStatus-score';
+      riskStatus.appendChild(score);
+      score.innerHTML = '安 全：' + riskStatusData.data.score.security;
+      score.innerHTML += ' <br/> 系 统：' + riskStatusData.data.score.system;
+      score.innerHTML += ' <br/> 网 络：' + riskStatusData.data.score.network;
+
     }
   };
 
-  IcsReportForm.prototype.createBugDetails = function (node, bugDetailsData) {
+  IcsReportForm.prototype.createBugDetails = function(node, bugDetailsData) {
     if (!bugDetailsData) {
       throw 'Validation error: obj.body.totalStatus not found';
     } else {
@@ -159,7 +166,7 @@
     }
   };
 
-  IcsReportForm.prototype.createConclusion = function (node, conclusionData) {
+  IcsReportForm.prototype.createConclusion = function(node, conclusionData) {
     if (!conclusionData) {
       throw 'Validation error: obj.body.totalStatus not found';
     } else {
@@ -169,6 +176,19 @@
       node.appendChild(conclusion);
       this.createSubtitle(conclusion, conclusionData.subtitle);
 
+      let head = document.createElement('div');
+      let problems = document.createElement('div');
+      head.className = 'report-body-conclusion-head';
+      problems.className = 'report-body-conclusion-problems';
+      head.innerHTML = conclusionData.data.head;
+      conclusion.appendChild(head);
+      conclusion.appendChild(problems);
+
+      for (let i = 0; i < conclusionData.data.problems.length; i++) {
+        problems.innerHTML += (i + 1) + '. ' + conclusionData.data.problems[i] + ' <br/><br/>';
+
+      }
+
     }
   };
 
@@ -176,14 +196,14 @@
   /*-------------------------------------------------------------------------------------------------*/
   /* Factory functions */
 
-  IcsReportForm.prototype.createSubtitle = function (node, subtitle) {
+  IcsReportForm.prototype.createSubtitle = function(node, subtitle) {
     let subtitleElem = document.createElement('div');
     subtitleElem.className = 'report-body-subtitle';
     node.appendChild(subtitleElem);
     subtitleElem.innerHTML = subtitle;
   };
 
-  IcsReportForm.prototype.createTable = function (node, data) {
+  IcsReportForm.prototype.createTable = function(node, data) {
     if (!data) {
       throw 'Validation error: data not found';
     } else {
@@ -228,12 +248,37 @@
     }
   };
 
+  IcsReportForm.prototype.getDate = function(time, format) {
+    let curTime = undefined;
+    if (time && typeof time === 'string')
+      curTime = new Date(time);
+    else
+      curTime = (time) ? time : new Date();
+
+    let convert = function(digit) {
+      if (digit < 10) return '0' + digit;
+      else return digit.toString();
+    };
+
+    let year = curTime.getFullYear();
+    let month = convert(curTime.getMonth() + 1);
+    let day = convert(curTime.getDate());
+    let hour = convert(curTime.getHours());
+    let minute = convert(curTime.getMinutes());
+    let second = convert(curTime.getSeconds());
+
+    if (format === 'idString')
+      return parseInt('0' + year + month + day + hour + minute + second);
+    else
+      return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+
+  }
 
   /*-------------------------------------------------------------------------------------------------*/
   /* Style functions */
 
 
-  IcsReportForm.prototype.oReportFormCss = function (nodeWidth) { // main css
+  IcsReportForm.prototype.oReportFormCss = function(nodeWidth) { // main css
     this.nodeElement.className = 'report-container';
     let css = document.getElementsByTagName("style")[0];
     if (!css) {
@@ -245,7 +290,7 @@
 
   };
 
-  IcsReportForm.prototype.oHeaderCss = function (nodeWidth) { // header css
+  IcsReportForm.prototype.oHeaderCss = function(nodeWidth) { // header css
     let css = document.getElementsByTagName("style")[0];
     if (!css) {
       css = document.createElement("style");
@@ -257,7 +302,7 @@
 
   };
 
-  IcsReportForm.prototype.oBodyCss = function (nodeWidth) { // body css
+  IcsReportForm.prototype.oBodyCss = function(nodeWidth) { // body css
     let css = document.getElementsByTagName("style")[0];
     if (!css) {
       css = document.createElement("style");
@@ -268,7 +313,7 @@
     css.innerText += ' .report-body-subtitle {font-size: 24px; padding: 20px; border-bottom: 1px solid #999999;}';
   };
 
-  IcsReportForm.prototype.oFooterCss = function () { // footer css
+  IcsReportForm.prototype.oFooterCss = function() { // footer css
     let css = document.getElementsByTagName("style")[0];
     if (!css) {
       css = document.createElement("style");
@@ -278,7 +323,7 @@
     css.innerText += ' .report-footer {padding: 0px 50px; padding-bottom: 20px; display: flex; justify-content: space-between; color: #999999;}';
   };
 
-  IcsReportForm.prototype.oIntroductionCss = function () { // body.introduction css
+  IcsReportForm.prototype.oIntroductionCss = function() { // body.introduction css
     let css = document.getElementsByTagName("style")[0];
     if (!css) {
       css = document.createElement("style");
@@ -293,7 +338,7 @@
 
   };
 
-  IcsReportForm.prototype.oTotalStatusCss = function () { // body.totalStatus css
+  IcsReportForm.prototype.oTotalStatusCss = function() { // body.totalStatus css
     let css = document.getElementsByTagName("style")[0];
     if (!css) {
       css = document.createElement("style");
@@ -303,7 +348,17 @@
     css.innerText += ' ';
   };
 
-  IcsReportForm.prototype.oRiskStatusCss = function () { // body.riskStatus css
+  IcsReportForm.prototype.oRiskStatusCss = function() { // body.riskStatus css
+    let css = document.getElementsByTagName("style")[0];
+    if (!css) {
+      css = document.createElement("style");
+      document.head.appendChild(css);
+    }
+
+    css.innerText += ' .report-body-riskStatus-score {padding: 20px 8px;}';
+  };
+
+  IcsReportForm.prototype.oBugDetailsCss = function() { // body.bugDetails css
     let css = document.getElementsByTagName("style")[0];
     if (!css) {
       css = document.createElement("style");
@@ -313,28 +368,19 @@
     css.innerText += ' ';
   };
 
-  IcsReportForm.prototype.oBugDetailsCss = function () { // body.bugDetails css
+  IcsReportForm.prototype.oConclusionCss = function() { // body.conclusion css
     let css = document.getElementsByTagName("style")[0];
     if (!css) {
       css = document.createElement("style");
       document.head.appendChild(css);
     }
 
-    css.innerText += ' ';
-  };
-
-  IcsReportForm.prototype.oConclusionCss = function () { // body.conclusion css
-    let css = document.getElementsByTagName("style")[0];
-    if (!css) {
-      css = document.createElement("style");
-      document.head.appendChild(css);
-    }
-
-    css.innerText += ' ';
+    css.innerText += ' .report-body-conclusion-head {padding: 8px;}';
+    css.innerText += ' .report-body-conclusion-problems {padding: 8px 20px;}';
   };
 
 
-  IcsReportForm.prototype.oTableCss = function (flag, tWidth, cWidths) { // table css
+  IcsReportForm.prototype.oTableCss = function(flag, tWidth, cWidths) { // table css
 
     // fetch style element
     let css = document.getElementsByTagName("style")[0];
@@ -350,11 +396,11 @@
       console.log(sum);
     }
 
-    css.innerText += ' .' + flag + '-table-container {border-top: 1px solid #999999; border-bottom: 1px solid #999999;}';
-    css.innerText += ' .' + flag + '-head {width: 100%; height: 30px; background: #BBBBBB;}';
-    css.innerText += ' .' + flag + '-row {width: 100%; height: 30px; background: #EEEEEE;}';
-    css.innerText += ' .' + flag + '-double {width: 100%; height: 30px; background: #FFFFFF;}';
-    css.innerText += ' .' + flag + '-col {float: left; height: 100%;}';
+    css.innerText += ' .' + flag + '-table-container {display: flex; flex-direction: column; height: auto; border-top: 1px solid #999999; border-bottom: 1px solid #999999;}';
+    css.innerText += ' .' + flag + '-head {width: 100%; height: auto; background: #BBBBBB;}';
+    css.innerText += ' .' + flag + '-row {width: 100%; height: auto; background: #EEEEEE;}';
+    css.innerText += ' .' + flag + '-double {width: 100%; height: auto; background: #FFFFFF;}';
+    css.innerText += ' .' + flag + '-col {float: left; height: 100%; padding: 5px;}';
 
     for (let i = 0; i < cWidths.length; i++) {
       let cWidth = ((tWidth - 2) * cWidths[i]) / sum;
